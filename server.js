@@ -13,6 +13,18 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
-  console.log("SUCCESS: " + connection.threadId);
+  console.log("SUCCESS: CONNECTED TO PORT: 3306");
 });
+
+//1. Ask the user what they would like to do
+//2. Add ability to complete each of the options listed in 1
+//view employees
+//view employees by role
+//view employees by department
+//update employees
+//add employees
+//update employees
+//add roles
+//add departments
+
 

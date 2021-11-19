@@ -35,18 +35,24 @@ const initialPrompt = [
   },
 ];
 function startEmployeeManager() {
-  inquirer.prompt(initialPrompt);
+  inquirer.prompt(initialPrompt).then((choice) => {});
 }
 
 startEmployeeManager();
+
 //2. Add ability to complete each of the options listed in 1
 //view employees
+function viewAllEmployees() {}
 //view employees by role
+function viewEmployeeByRole() {}
 //view employees by department
+function viewEmployeeByDepartment() {}
 //update employees
+function updateEmployee() {}
 //add employees
-//update employees
+function addEmployee() {}
 //add roles
+function addRole() {}
 //add departments
-
+function addDepartment() {}
 

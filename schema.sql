@@ -31,3 +31,6 @@ CREATE TABLE employee (
 );
 
 -- 4. add select statements
+SELECT * FROM department;
+SELECT * FROM role;
+SELECT * FROM employee;

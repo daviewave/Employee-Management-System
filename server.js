@@ -71,42 +71,52 @@ function updateEmployee() {}
 
 
 
-var managersRole = [];
 const addEmployeePrompt = [
-    {
-      type: "input",
-      name: "firstName",
-      message: "Enter their first name "
-    },
-    {
-      type: "input",
-      name: "lastname",
-      message: "Enter their last name "
-    },
-    {
-      type: "list",
-      name: "role",
-      message: "What is their role? ",
-    },
-    {
-      type: "rawlist",
-      name: "choice",
-      message: "Whats their managers name?",
-    }
-]
+  {
+    type: "input",
+    name: "firstName",
+    message: "Enter their first name ",
+  },
+  {
+    type: "input",
+    name: "lastname",
+    message: "Enter their last name ",
+  },
+  {
+    type: "list",
+    name: "role",
+    message: "What is their role? ",
+  },
+  {
+    type: "rawlist",
+    name: "choice",
+    message: "Whats their managers name?",
+  },
+];
 
 function addEmployee() {}
-var employeeRole = [];
-function chooseRole(){
-    connection.query("SELECT * FROM role", function(err, res) {
-        if (err) throw err
-        for (var i = 0; i < res.length; i++) {
-          employeeRole.push(res[i].jobTitle);
-        }
-    
-      });
-      return employeeRole;
+let employeeRole = [];
+function chooseRole() {
+  connection.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+      employeeRole.push(res[i].jobTitle);
+    }
+  });
+  return employeeRole;
 }
+let managers = [];
+function chooseManager() {
+  connection.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+      managers.push(res[i].first_name);
+    }
+  });
+  return managers;
+}
+
+
 //add roles
 function addRole() {}
 //add departments

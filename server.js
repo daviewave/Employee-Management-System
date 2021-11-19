@@ -35,14 +35,28 @@ const initialPrompt = [
   },
 ];
 function startEmployeeManager() {
-  inquirer.prompt(initialPrompt).then((choice) => {});
+  inquirer.prompt(initialPrompt).then((choice) => {
+    switch (choice.task) {
+      case "View all Employees?":
+        viewAllEmployees();
+        break;
+    }
+  });
 }
 
 startEmployeeManager();
 
 //2. Add ability to complete each of the options listed in 1
 //view employees
-function viewAllEmployees() {}
+function viewAllEmployees() {
+  connection.query(
+    "SELECT employee.first_name, employee.last_name, role.jobTitle, role.salary, department.name, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employee INNER JOIN role on role.id = employee.role_id INNER JOIN department on department.id = role.department_id left join employee e on employee.manager_id = e.id;",
+    (err, res) => {
+      if (err) throw err;
+      console.table(res);
+    }
+  );
+}
 //view employees by role
 function viewEmployeeByRole() {}
 //view employees by department

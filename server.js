@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
   insecureAuth: true,
 });
 
-connection.connect(function (err) {
+connection.connect((err) => {
   if (err) throw err;
   console.log("SUCCESS: CONNECTED TO PORT: 3306");
   startEmployeeManager();
@@ -38,30 +38,6 @@ const initialPrompt = [
     ],
   },
 ];
-// const addEmployeePrompt = [
-//   {
-//     type: "input",
-//     name: "firstName",
-//     message: "Enter their first name ",
-//   },
-//   {
-//     type: "input",
-//     name: "lastName",
-//     message: "Enter their last name ",
-//   },
-//   {
-//     type: "list",
-//     name: "role",
-//     message: "What is their role? ",
-//     choices: chooseRole(),
-//   },
-//   {
-//     type: "rawlist",
-//     name: "choice",
-//     message: "Whats their managers name?",
-//     choices: chooseManager(),
-//   },
-// ];
 
 function startEmployeeManager() {
   inquirer.prompt(initialPrompt).then((choice) => {
@@ -126,16 +102,129 @@ function viewEmployeeByRole() {
 function viewEmployeeByDepartment() {
   connection.query(
     "SELECT employee.first_name, employee.last_name, department.name AS Department FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employee.id;",
-    (err, res) => {
+    function (err, res) {
       if (err) throw err;
       console.table(res);
     }
   );
 }
-//update employees
-function updateEmployee() {}
+
+let listOfRoles = [];
+function chooseRole() {
+  connection.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+      listOfRoles.push(res[i].jobTitle);
+    }
+  });
+  return listOfRoles;
+}
+
+let listOfManagers = [];
+function chooseManager() {
+  connection.query(
+    "SELECT first_name, last_name FROM employee WHERE manager_id IS NULL",
+    (err, res) => {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        listOfManagers.push(res[i].first_name);
+      }
+    }
+  );
+  return listOfManagers;
+}
+const addEmployeePrompt = [
+  {
+    type: "input",
+    name: "firstName",
+    message: "Enter their first name ",
+  },
+  {
+    type: "input",
+    name: "lastName",
+    message: "Enter their last name ",
+  },
+  {
+    type: "list",
+    name: "role",
+    message: "What is their role? ",
+    choices: chooseRole(),
+  },
+  {
+    type: "rawlist",
+    name: "choice",
+    message: "Whats their managers name?",
+    choices: chooseManager(),
+  },
+];
+
+function updateEmployee() {
+  connection.query(
+    "SELECT employee.last_name, role.jobTitle FROM employee JOIN role ON employee.role_id = role.id;",
+    (err, res) => {
+      if (err) throw err;
+      console.log(res);
+      inquirer
+        .prompt([
+          {
+            name: "lastname",
+            type: "rawlist",
+            message: "What is the Employee's last name? ",
+            choices: () => {
+              let lastname = [];
+              for (var i = 0; i < res.length; i++) {
+                lastname.push(res[i].last_name);
+              }
+              return lastname;
+            },
+          },
+          {
+            name: "role",
+            type: "rawlist",
+            message: "What is the Employees new title? ",
+            choices: chooseRole(),
+          },
+        ])
+        .then((val) => {
+          let roleId = chooseRole().indexOf(val.role) + 1;
+          connection.query(
+            "UPDATE employee SET WHERE ?",
+            {
+              last_name: val.lastname,
+            },
+            {
+              role_id: roleId,
+            },
+            (err) => {
+              if (err) throw err;
+              console.table(val);
+            }
+          );
+        });
+    }
+  );
+}
 //add employees
-function addEmployee() {}
+function addEmployee() {
+  inquirer.prompt(addEmployeePrompt).then((val) => {
+    let roleId = chooseRole().indexOf(val.role) + 1;
+    let managerId = chooseManager().indexOf(val.choice) + 1;
+    connection.query(
+      "INSERT INTO employee SET ?",
+      {
+        first_name: val.firstName,
+        last_name: val.lastName,
+        manager_id: managerId,
+        role_id: roleId,
+      },
+      (err) => {
+        if (err) throw err;
+
+        console.table(val);
+      }
+    );
+  });
+}
 //add roles
 function addRole() {}
 //add departments

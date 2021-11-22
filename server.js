@@ -38,30 +38,30 @@ const initialPrompt = [
     ],
   },
 ];
-const addEmployeePrompt = [
-  {
-    type: "input",
-    name: "firstName",
-    message: "Enter their first name ",
-  },
-  {
-    type: "input",
-    name: "lastName",
-    message: "Enter their last name ",
-  },
-  {
-    type: "list",
-    name: "role",
-    message: "What is their role? ",
-    choices: chooseRole(),
-  },
-  {
-    type: "rawlist",
-    name: "choice",
-    message: "Whats their managers name?",
-    choices: chooseManager(),
-  },
-];
+// const addEmployeePrompt = [
+//   {
+//     type: "input",
+//     name: "firstName",
+//     message: "Enter their first name ",
+//   },
+//   {
+//     type: "input",
+//     name: "lastName",
+//     message: "Enter their last name ",
+//   },
+//   {
+//     type: "list",
+//     name: "role",
+//     message: "What is their role? ",
+//     choices: chooseRole(),
+//   },
+//   {
+//     type: "rawlist",
+//     name: "choice",
+//     message: "Whats their managers name?",
+//     choices: chooseManager(),
+//   },
+// ];
 
 function startEmployeeManager() {
   inquirer.prompt(initialPrompt).then((choice) => {
@@ -112,7 +112,15 @@ function viewAllEmployees() {
 }
 
 //view employees by role
-function viewEmployeeByRole() {}
+function viewEmployeeByRole() {
+  connection.query(
+    "SELECT employee.first_name, employee.last_name, role.jobTitle AS Title FROM employee JOIN role ON employee.role_id = role.id;",
+    (err, res) => {
+      if (err) throw err;
+      console.table(res);
+    }
+  );
+}
 
 //view employees by department
 function viewEmployeeByDepartment() {}

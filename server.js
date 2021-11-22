@@ -225,8 +225,40 @@ function addEmployee() {
     );
   });
 }
+
+const addRolePrompt = [
+  {
+    type: "input",
+    name: "jobTitle",
+    message: "What is the roles job title?",
+  },
+  {
+    type: "input",
+    name: "salary",
+    message: "What is the Salary?",
+  },
+];
 //add roles
-function addRole() {}
+function addRole() {
+  connection.query(
+    "SELECT role.jobTitle AS Title, role.salary AS Salary FROM role",
+    (err, res) => {
+      inquirer.prompt(addRolePrompt).then((res) => {
+        connection.query(
+          "INSERT INTO role SET ?",
+          {
+            jobTitle: res.jobTitle,
+            salary: res.salary,
+          },
+          (err) => {
+            if (err) throw err;
+            console.table(res);
+          }
+        );
+      });
+    }
+  );
+}
 //add departments
 function addDepartment() {}
 

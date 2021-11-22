@@ -259,6 +259,27 @@ function addRole() {
     }
   );
 }
+
+const addDepartmentPrompt = [
+  {
+    type: "input",
+    name: "name",
+    message: "What Department would you like to add?",
+  },
+];
 //add departments
-function addDepartment() {}
+function addDepartment() {
+  inquirer.prompt(addDepartmentPrompt).then((res) => {
+    connection.query(
+      "INSERT INTO department SET ? ",
+      {
+        name: res.name,
+      },
+      (err) => {
+        if (err) throw err;
+        console.table(res);
+      }
+    );
+  });
+}
 

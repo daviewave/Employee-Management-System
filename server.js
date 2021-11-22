@@ -83,6 +83,7 @@ function viewAllEmployees() {
     (err, res) => {
       if (err) throw err;
       console.table(res);
+      startEmployeeManager();
     }
   );
 }

@@ -106,6 +106,7 @@ function viewEmployeeByDepartment() {
     function (err, res) {
       if (err) throw err;
       console.table(res);
+      startEmployeeManager();
     }
   );
 }
@@ -199,6 +200,7 @@ function updateEmployee() {
             (err) => {
               if (err) throw err;
               console.table(val);
+              startEmployeeManager();
             }
           );
         });
@@ -220,8 +222,8 @@ function addEmployee() {
       },
       (err) => {
         if (err) throw err;
-
         console.table(val);
+        startEmployeeManager();
       }
     );
   });
@@ -254,6 +256,7 @@ function addRole() {
           (err) => {
             if (err) throw err;
             console.table(res);
+            startEmployeeManager();
           }
         );
       });
@@ -279,6 +282,7 @@ function addDepartment() {
       (err) => {
         if (err) throw err;
         console.table(res);
+        startEmployeeManager();
       }
     );
   });
